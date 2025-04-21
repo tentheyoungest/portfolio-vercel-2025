@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata = {
   title: "Jessica Bonzo - Dev [Front-End Web / CMS Platforms]",
   description:
-    "Vercel portfolio - Jessica Bonzo, Front-end Dev/ CMS Platforms"
+    "Vercel portfolio - Jessica Bonzo, Front-end Dev / CMS Platforms"
 }
 
 export default function RootLayout({

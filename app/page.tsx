@@ -94,7 +94,7 @@ export default function Portfolio() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Jessica Bonzo</h1>
-              <p className="text-xl text-muted-foreground">Frontend Developer specializing in Webflow and WordPress</p>
+              <p className="text-xl text-muted-foreground">Front-end Dev / CMS Platforms</p>
               <div className="flex flex-col gap-2 text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4" />
