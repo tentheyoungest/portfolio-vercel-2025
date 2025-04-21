@@ -6,10 +6,9 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Jessica Joy Bonzo - Frontend Developer Portfolio",
+  title: "Jessica Bonzo - Dev [Front-End Web / CMS Platforms]",
   description:
-    "Professional portfolio of Jessica Joy Bonzo, a Frontend Developer specializing in Webflow and WordPress",
-    generator: 'v0.dev'
+    "Vercel portfolio - Jessica Bonzo, Front-end Dev/ CMS Platforms"
 }
 
 export default function RootLayout({
