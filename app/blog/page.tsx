@@ -18,7 +18,7 @@ export default async function BlogPage() {
         <div className="container flex h-16 items-center justify-between py-4">
           <div className="flex items-center gap-2">
             <Link href="/" className="text-xl font-bold">
-              Jessica Joy Bonzo
+              Jessica Bonzo
             </Link>
           </div>
           <nav className="hidden md:flex gap-6">
@@ -195,7 +195,7 @@ export default async function BlogPage() {
         <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
           <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
             <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-              &copy; {new Date().getFullYear()} Jessica Joy Bonzo. All rights reserved.
+              &copy; {new Date().getFullYear()} Jessica Bonzo. All rights reserved.
             </p>
           </div>
           <div className="flex gap-4">

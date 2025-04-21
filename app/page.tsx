@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -5,15 +6,58 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Briefcase, Code, GraduationCap, Mail, MapPin, Phone, Award, ExternalLink, Linkedin } from "lucide-react"
+import { FormEvent, useState } from "react"
 
 export default function Portfolio() {
-  return (
-    <div className="min-h-screen bg-background">
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [submitError, setSubmitError] = useState("")
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }))
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitError("")
+    
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_CONTACT_FORM_ENDPOINT || "", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+      
+      setSubmitSuccess(true)
+      setFormData({ name: "", email: "", message: "" })
+
+    } catch (error) {
+      setSubmitError("There was an error submitting your message. Please try again.")
+      console.error("Form submission error:", error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (    <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between py-4">
           <div className="flex items-center gap-2">
-            <span className="text-xl font-bold">Jessica Joy Bonzo</span>
+            <span className="text-xl font-bold">Jessica Bonzo</span>
           </div>
           <nav className="hidden md:flex gap-6">
             <Link href="#about" className="text-sm font-medium hover:text-primary">
@@ -49,7 +93,7 @@ export default function Portfolio() {
         <section id="about" className="py-12 md:py-16 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Jessica Joy Bonzo</h1>
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Jessica Bonzo</h1>
               <p className="text-xl text-muted-foreground">Frontend Developer specializing in Webflow and WordPress</p>
               <div className="flex flex-col gap-2 text-muted-foreground">
                 <div className="flex items-center gap-2">
@@ -77,7 +121,7 @@ export default function Portfolio() {
               </div>
               <div className="flex gap-4 pt-4">
                 <Button asChild>
-                  <Link href="#contact">Contact Me</Link>
+                  <Link href="/assets/files/CV - Dev Engineer - Jessica Bonzo.pdf" target="_blank">View Resume</Link>
                 </Button>
                 <Button variant="outline" asChild>
                   <Link href="#projects">View Projects</Link>
@@ -87,8 +131,8 @@ export default function Portfolio() {
             <div className="flex justify-center">
               <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-primary/20">
                 <Image
-                  src="/placeholder.svg?height=256&width=256"
-                  alt="Jessica Joy Bonzo"
+                  src="/assets/images/Jessica Bonzo.jpeg?height=256&width=256"
+                  alt="Jessica Bonzo"
                   fill
                   className="object-cover"
                   priority
@@ -110,7 +154,7 @@ export default function Portfolio() {
               <CardContent className="p-6 space-y-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-xl font-bold">EngineRoom Applications</h3>
+                    <h3 className="text-xl font-bold"><Link href="https://www.engineroom.com.au/" target="_blank">EngineRoom Applications</Link></h3>
                     <p className="text-muted-foreground">Developer: Webflow (Platform)</p>
                   </div>
                   <div className="flex flex-col items-start md:items-end">
@@ -140,7 +184,7 @@ export default function Portfolio() {
               <CardContent className="p-6 space-y-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-xl font-bold">500 Designs LLC</h3>
+                    <h3 className="text-xl font-bold"><Link href="https://500designs.com/" target="_blank">500 Designs LLC</Link></h3>
                     <p className="text-muted-foreground">
                       Developer: WordPress and Webflow (Platform; Certified Enterprise Partner)
                     </p>
@@ -184,7 +228,7 @@ export default function Portfolio() {
               <CardContent className="p-6 space-y-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-xl font-bold">Bliimo Technologies Inc</h3>
+                    <h3 className="text-xl font-bold"><Link href="https://www.linkedin.com/company/bliimo/" target="_blank">Bliimo Technologies Inc</Link></h3>
                     <p className="text-muted-foreground">Front-End Web Developer</p>
                   </div>
                   <div className="flex flex-col items-start md:items-end">
@@ -216,31 +260,10 @@ export default function Portfolio() {
             Key Projects
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Monument */}
-            <Card className="overflow-hidden">
-              <div className="aspect-video relative">
-                <Image src="/placeholder.svg?height=200&width=400" alt="Monument" fill className="object-cover" />
-              </div>
-              <CardContent className="p-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-bold">Monument</h3>
-                    <p className="text-sm text-muted-foreground">Lead Developer, 2024</p>
-                  </div>
-                  <Button variant="ghost" size="icon" asChild>
-                    <Link href="#" target="_blank">
-                      <ExternalLink className="h-4 w-4" />
-                      <span className="sr-only">Visit Monument</span>
-                    </Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Pillumina */}
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
-                <Image src="/placeholder.svg?height=200&width=400" alt="Pillumina" fill className="object-cover" />
+                <Image src="/assets/images/portfolio/pillumina.jpg" alt="Pillumina" fill className="object-cover" />
               </div>
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
@@ -249,7 +272,7 @@ export default function Portfolio() {
                     <p className="text-sm text-muted-foreground">Solo Developer, 2024</p>
                   </div>
                   <Button variant="ghost" size="icon" asChild>
-                    <Link href="#" target="_blank">
+                    <Link href="https://www.pillumina.com/" target="_blank">
                       <ExternalLink className="h-4 w-4" />
                       <span className="sr-only">Visit Pillumina</span>
                     </Link>
@@ -261,7 +284,7 @@ export default function Portfolio() {
             {/* Delta 360 */}
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
-                <Image src="/placeholder.svg?height=200&width=400" alt="Delta 360" fill className="object-cover" />
+                <Image src="/assets/images/portfolio/delta.png" alt="Delta 360" fill className="object-cover" />
               </div>
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
@@ -270,7 +293,7 @@ export default function Portfolio() {
                     <p className="text-sm text-muted-foreground">Solo Developer, 2024</p>
                   </div>
                   <Button variant="ghost" size="icon" asChild>
-                    <Link href="#" target="_blank">
+                    <Link href="https://www.delta360.energy/" target="_blank">
                       <ExternalLink className="h-4 w-4" />
                       <span className="sr-only">Visit Delta 360</span>
                     </Link>
@@ -282,7 +305,7 @@ export default function Portfolio() {
             {/* BarTrack */}
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
-                <Image src="/placeholder.svg?height=200&width=400" alt="BarTrack" fill className="object-cover" />
+                <Image src="/assets/images/portfolio/bartrack.png" alt="BarTrack" fill className="object-cover" />
               </div>
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
@@ -291,7 +314,7 @@ export default function Portfolio() {
                     <p className="text-sm text-muted-foreground">Solo/Lead Developer, 2023</p>
                   </div>
                   <Button variant="ghost" size="icon" asChild>
-                    <Link href="#" target="_blank">
+                    <Link href="https://www.bartrack.beer/" target="_blank">
                       <ExternalLink className="h-4 w-4" />
                       <span className="sr-only">Visit BarTrack</span>
                     </Link>
@@ -303,7 +326,7 @@ export default function Portfolio() {
             {/* Web3Auth */}
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
-                <Image src="/placeholder.svg?height=200&width=400" alt="Web3Auth" fill className="object-cover" />
+                <Image src="/assets/images/portfolio/web3auth.png" alt="Web3Auth" fill className="object-cover" />
               </div>
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
@@ -312,7 +335,7 @@ export default function Portfolio() {
                     <p className="text-sm text-muted-foreground">Solo Developer, 2021-2023</p>
                   </div>
                   <Button variant="ghost" size="icon" asChild>
-                    <Link href="#" target="_blank">
+                    <Link href="https://web3auth.io/" target="_blank">
                       <ExternalLink className="h-4 w-4" />
                       <span className="sr-only">Visit Web3Auth</span>
                     </Link>
@@ -325,7 +348,7 @@ export default function Portfolio() {
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
                 <Image
-                  src="/placeholder.svg?height=200&width=400"
+                  src="/assets/images/portfolio/refine-recovery.png"
                   alt="Refine Recovery"
                   fill
                   className="object-cover"
@@ -338,7 +361,7 @@ export default function Portfolio() {
                     <p className="text-sm text-muted-foreground">Lead Developer, 2024</p>
                   </div>
                   <Button variant="ghost" size="icon" asChild>
-                    <Link href="#" target="_blank">
+                    <Link href="https://www.linkedin.com/posts/activity-7252873702327926785-rs-O" target="_blank">
                       <ExternalLink className="h-4 w-4" />
                       <span className="sr-only">Visit Refine Recovery</span>
                     </Link>
@@ -346,18 +369,29 @@ export default function Portfolio() {
                 </div>
               </CardContent>
             </Card>
-          </div>
-          <div className="flex justify-center">
-            <Button variant="outline" asChild>
-              <Link href="#" className="flex items-center gap-2">
-                View All Projects
-                <ExternalLink className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </section>
 
-        {/* Skills Section */}
+            {/* KBS */}
+            <Card className="overflow-hidden">
+              <div className="aspect-video relative">
+                <Image src="/assets/images/portfolio/KBS.jpeg" alt="KBS" fill className="object-cover" />
+              </div>
+              <CardContent className="p-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-bold">KBS</h3>
+                    <p className="text-sm text-muted-foreground">Lead Developer, 2024</p>
+                  </div>
+                  <Button variant="ghost" size="icon" asChild>
+                    <Link href="https://kbs.com/" target="_blank">
+                      <ExternalLink className="h-4 w-4" />
+                      <span className="sr-only">Visit KBS</span>
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>        {/* Skills Section */}
         <section id="skills" className="py-12 space-y-8">
           <h2 className="text-3xl font-bold tracking-tight">Technical Skills</h2>
 
@@ -598,7 +632,7 @@ export default function Portfolio() {
             <Card>
               <CardContent className="p-6 space-y-4">
                 <h3 className="text-xl font-bold">Send a Message</h3>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 gap-4">
                     <div className="space-y-2">
                       <label htmlFor="name" className="text-sm font-medium">
@@ -608,6 +642,9 @@ export default function Portfolio() {
                         id="name"
                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="Your name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
                     <div className="space-y-2">
@@ -619,6 +656,9 @@ export default function Portfolio() {
                         type="email"
                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="Your email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
                     <div className="space-y-2">
@@ -629,12 +669,30 @@ export default function Portfolio() {
                         id="message"
                         className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="Your message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
-                  <Button type="submit" className="w-full">
-                    Send Message
-                  </Button>
+                  
+                  {submitError && (
+                    <p className="text-sm text-red-500">{submitError}</p>
+                  )}
+                  
+                  {submitSuccess ? (
+                    <div className="p-3 bg-green-100 text-green-700 rounded-md">
+                      Thank you for your message! I'll get back to you soon.
+                    </div>
+                  ) : (
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Sending..." : "Send Message"}
+                    </Button>
+                  )}
                 </form>
               </CardContent>
             </Card>
@@ -647,7 +705,7 @@ export default function Portfolio() {
         <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
           <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
             <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-              &copy; {new Date().getFullYear()} Jessica Joy Bonzo. All rights reserved.
+              &copy; {new Date().getFullYear()} Jessica Bonzo. All rights reserved.
             </p>
           </div>
           <div className="flex gap-4">
