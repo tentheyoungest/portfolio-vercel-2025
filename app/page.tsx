@@ -129,7 +129,7 @@ export default function Portfolio() {
               </div>
             </div>
             <div className="flex justify-center">
-              <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-primary/20">
+              <div className="relative w-96 h-96 rounded-full overflow-hidden border-4 border-primary/20">
                 <Image
                   src="/assets/images/Jessica Bonzo.jpeg?height=256&width=256"
                   alt="Jessica Bonzo"
