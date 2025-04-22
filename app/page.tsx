@@ -5,8 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Briefcase, Code, GraduationCap, Mail, MapPin, Phone, Award, ExternalLink, Linkedin } from "lucide-react"
-import { FormEvent, useState } from "react"
+import { 
+  Briefcase, Code, GraduationCap, Mail, MapPin, Phone, Award, 
+  ExternalLink, Linkedin, ArrowUp, Menu, X 
+} from "lucide-react"
+import { FormEvent, useState, useEffect } from "react"
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 export default function Portfolio() {
   const [formData, setFormData] = useState({
@@ -17,6 +21,25 @@ export default function Portfolio() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState("")
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show button when page is scrolled down 300px
+      setShowScrollTop(window.scrollY > 300)
+    }
+    
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target
@@ -52,6 +75,10 @@ export default function Portfolio() {
     }
   }
 
+  const closeSheet = () => {
+    setIsOpen(false)
+  }
+
   return (    <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -85,6 +112,45 @@ export default function Portfolio() {
           <Button asChild size="sm" className="hidden md:flex">
             <Link href="#contact">Get in Touch</Link>
           </Button>
+
+                    {/* Mobile Navigation */}
+                    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                      <SheetTrigger asChild className="md:hidden">
+                        <Button variant="ghost" size="icon">
+                          <Menu className="h-6 w-6" />
+                          <span className="sr-only">Toggle menu</span>
+                        </Button>
+                      </SheetTrigger>
+                      <SheetContent side="right" className="w-[80%] sm:w-[350px]">
+                       <SheetTitle>Navigation</SheetTitle>
+                        <div className="flex flex-col gap-6 mt-8">
+                          <Link href="#about" className="text-lg font-medium hover:text-primary" onClick={closeSheet}>
+                            About
+                          </Link>
+                          <Link href="#experience" className="text-lg font-medium hover:text-primary" onClick={closeSheet}>
+                            Experience
+                          </Link>
+                          <Link href="#projects" className="text-lg font-medium hover:text-primary" onClick={closeSheet}>
+                            Projects
+                          </Link>
+                          <Link href="#skills" className="text-lg font-medium hover:text-primary" onClick={closeSheet}>
+                            Skills
+                          </Link>
+                          <Link href="#education" className="text-lg font-medium hover:text-primary" onClick={closeSheet}>
+                            Education
+                          </Link>
+                          <Link href="/blog" className="text-lg font-medium hover:text-primary" onClick={closeSheet}>
+                            Blog
+                          </Link>
+                          <Link href="#contact" className="text-lg font-medium hover:text-primary" onClick={closeSheet}>
+                            Contact
+                          </Link>
+                          <Button asChild size="sm" className="mt-4" onClick={closeSheet}>
+                            <Link href="#contact">Get in Touch</Link>
+                          </Button>
+                        </div>
+                      </SheetContent>
+                    </Sheet>
         </div>
       </header>
 
@@ -98,19 +164,19 @@ export default function Portfolio() {
               <div className="flex flex-col gap-2 text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4" />
-                  <Link href="mailto:jessicabonzo.dev@gmail.com" className="hover:text-primary">
+                  <Link href="mailto:jessicabonzo.dev@gmail.com" className="hover:text-primary underline">
                     jessicabonzo.dev@gmail.com
                   </Link>
                 </div>
                 <div className="flex items-center gap-2">
                   <Linkedin className="h-4 w-4" />
-                  <Link href="https://linkedin.com/in/jessica-bonzo" target="_blank" className="hover:text-primary">
+                  <Link href="https://linkedin.com/in/jessica-bonzo" target="_blank" className="hover:text-primary underline">
                     linkedin.com/in/jessica-bonzo
                   </Link>
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="h-4 w-4" />
-                  <Link href="tel:+639919383300" className="hover:text-primary">
+                  <Link href="tel:+639919383300" className="hover:text-primary underline">
                     +639919383300
                   </Link>
                 </div>
@@ -154,7 +220,7 @@ export default function Portfolio() {
               <CardContent className="p-6 space-y-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-xl font-bold"><Link href="https://www.engineroom.com.au/" target="_blank">EngineRoom Applications</Link></h3>
+                    <h3 className="underline text-black hover:text-primary text-xl font-bold"><Link href="https://www.engineroom.com.au/" target="_blank">EngineRoom Applications</Link></h3>
                     <p className="text-muted-foreground">Developer: Webflow (Platform)</p>
                   </div>
                   <div className="flex flex-col items-start md:items-end">
@@ -184,7 +250,7 @@ export default function Portfolio() {
               <CardContent className="p-6 space-y-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-xl font-bold"><Link href="https://500designs.com/" target="_blank">500 Designs LLC</Link></h3>
+                    <h3 className="underline text-black hover:text-primary text-xl font-bold"><Link href="https://500designs.com/" target="_blank">500 Designs LLC</Link></h3>
                     <p className="text-muted-foreground">
                       Developer: WordPress and Webflow (Platform; Certified Enterprise Partner)
                     </p>
@@ -228,8 +294,8 @@ export default function Portfolio() {
               <CardContent className="p-6 space-y-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-xl font-bold"><Link href="https://www.linkedin.com/company/bliimo/" target="_blank">Bliimo Technologies Inc</Link></h3>
-                    <p className="text-muted-foreground">Front-End Web Developer</p>
+                    <h3 className="underline text-black hover:text-primary text-xl font-bold"><Link href="https://www.linkedin.com/company/bliimo/" target="_blank">Bliimo Technologies Inc</Link></h3>
+                    <p className="text-muted-foreground">Associate Web Developer</p>
                   </div>
                   <div className="flex flex-col items-start md:items-end">
                     <Badge variant="outline" className="mb-1">
@@ -239,7 +305,7 @@ export default function Portfolio() {
                   </div>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                  <li>WordPress Project Lead (Pioneer Dev), ReactJS (web-based) in-house projects</li>
+                  <li>WordPress Project (Pioneer Dev)</li>
                   <li>
                     Cross-Functional Collaboration: Actively engages in daily stand-up meetings, code reviews, sprint
                     planning, and retros to ensure continuous improvement and alignment with team goals. Worked closely
@@ -250,6 +316,35 @@ export default function Portfolio() {
                 </ul>
               </CardContent>
             </Card>
+
+            {/* RNR */}
+            <Card>
+              <CardContent className="p-6 space-y-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-xl font-bold">RNR Digital Consultancy</h3>
+                    <p className="text-muted-foreground">Web App Developer Intern</p>
+                  </div>
+                  <div className="flex flex-col items-start md:items-end">
+                    <Badge variant="outline" className="mb-1">
+                      February 2019 – May 2019
+                    </Badge>
+                    <p className="text-sm text-muted-foreground">Pangasinan, PH (On-site)</p>
+                  </div>
+                </div>
+                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                  <li>CRUD web and mobile apps. Using React JS and Native.  </li>
+                    <li>Firebase for storing data.  </li>
+                    <li>Browser Dev Tools and Expo tool for debugging and building it.  </li>
+                    <li>Heroku for the deployment of the Apps. </li> 
+                    <li>Git / Github for code version control. </li>
+                  <li>
+                    Participated in Daily Stand-up Meetings, Code Reviews, Sprint Plannings, and Retros.
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            
           </div>
         </section>
 
@@ -373,13 +468,13 @@ export default function Portfolio() {
             {/* KBS */}
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
-                <Image src="/assets/images/portfolio/KBS.jpeg" alt="KBS" fill className="object-cover" />
+                <Image src="/assets/images/portfolio/kbs.jpeg" alt="KBS" fill className="object-cover" />
               </div>
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-bold">KBS</h3>
-                    <p className="text-sm text-muted-foreground">Lead Developer, 2024</p>
+                    <p className="text-sm text-muted-foreground">Lead Developer, 2021-2022</p>
                   </div>
                   <Button variant="ghost" size="icon" asChild>
                     <Link href="https://kbs.com/" target="_blank">
@@ -396,12 +491,12 @@ export default function Portfolio() {
           <h2 className="text-3xl font-bold tracking-tight">Technical Skills</h2>
 
           <Tabs defaultValue="development" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3  gap-2">
               <TabsTrigger value="development">Development</TabsTrigger>
               <TabsTrigger value="design">Design & Management</TabsTrigger>
               <TabsTrigger value="hosting">Hosting & SEO</TabsTrigger>
             </TabsList>
-            <TabsContent value="development" className="mt-6">
+            <TabsContent value="development" className="mt-24 sm:mt-6 space-y-4">
               <Card>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-bold mb-4">Development and Debugging</h3>
@@ -458,7 +553,7 @@ export default function Portfolio() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="design" className="mt-6">
+            <TabsContent value="design" className="mt-24 sm:mt-6 space-y-4">
               <Card>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-bold mb-4">Design and Tasks Project Management</h3>
@@ -474,7 +569,7 @@ export default function Portfolio() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="hosting" className="mt-6">
+            <TabsContent value="hosting" className="mt-24 sm:mt-6 space-y-4">
               <Card>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-bold mb-4">Hosting, SEO, Integrations</h3>
@@ -509,6 +604,9 @@ export default function Portfolio() {
                       Current Coursework: Management of R&D; Tech Acquisition and Assimilation; Tech-Based
                       Entrepreneurship
                     </p>
+                    <p className="text-sm mt-2">
+                    <Link href="https://www.researchgate.net/profile/Jessica-Joy-Bonzo" target="_blank" className="hover:text-primary underline">ResearchGate Publications</Link>
+                    </p>
                   </div>
                   <div className="flex flex-col items-start md:items-end">
                     <Badge variant="outline">2024 - 2027 (Expected)</Badge>
@@ -525,6 +623,7 @@ export default function Portfolio() {
                     <h3 className="text-xl font-bold">Pangasinan State University</h3>
                     <p className="text-muted-foreground">Bachelor of Science in Information Technology (BSIT)</p>
                     <p className="text-sm mt-2">Dean's Lister AY 2017-2018; App System Dev - Thesis Leader</p>
+                    <p className="text-sm mt-2"><Link href="https://www.linkedin.com/in/jessica-bonzo/details/projects/" target="_blank" className="hover:text-primary underline">Thesis: A mobile application for Population Office of Dagupan City</Link></p>
                   </div>
                   <div className="flex flex-col items-start md:items-end">
                     <Badge variant="outline">2014 - 2019</Badge>
@@ -606,19 +705,19 @@ export default function Portfolio() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
                     <Mail className="h-5 w-5 text-primary" />
-                    <Link href="mailto:jessicabonzo.dev@gmail.com" className="hover:text-primary">
+                    <Link href="mailto:jessicabonzo.dev@gmail.com" className="hover:text-primary underline">
                       jessicabonzo.dev@gmail.com
                     </Link>
                   </div>
                   <div className="flex items-center gap-3">
                     <Linkedin className="h-5 w-5 text-primary" />
-                    <Link href="https://linkedin.com/in/jessica-bonzo" target="_blank" className="hover:text-primary">
+                    <Link href="https://linkedin.com/in/jessica-bonzo" target="_blank" className="hover:text-primary underline">
                       linkedin.com/in/jessica-bonzo
                     </Link>
                   </div>
                   <div className="flex items-center gap-3">
                     <Phone className="h-5 w-5 text-primary" />
-                    <Link href="tel:+639919383300" className="hover:text-primary">
+                    <Link href="tel:+639919383300" className="hover:text-primary underline">
                       +639919383300
                     </Link>
                   </div>
@@ -724,6 +823,19 @@ export default function Portfolio() {
           </div>
         </div>
       </footer>
+
+      {/* Scroll to Top Button */}
+            {showScrollTop && (
+              <Button
+                variant="outline"
+                size="icon"
+                className="fixed bottom-6 right-6 z-50 rounded-full shadow-md hover:shadow-lg transition-all"
+                onClick={scrollToTop}
+                aria-label="Scroll to top"
+              >
+                <ArrowUp className="h-5 w-5" />
+              </Button>
+            )}
     </div>
   )
 }
